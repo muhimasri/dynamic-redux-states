@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./todo.css";
 
 export const TodoList = () => {
@@ -32,11 +32,35 @@ export const TodoList = () => {
       <tbody>
         {todoList.map((item) => (
           <tr key={item.id}>
-            <td>{item.title}</td>
-            <td>{item.completed}</td>
+            <td><TextBox id={item.id}></TextBox></td>
+            <td><CheckBox id={item.id}></CheckBox></td>
           </tr>
         ))}
       </tbody>
     </table>
   );
 };
+
+const TextBox = ({id}) => {
+  const value = useSelector(state => state.todoList[id]?.title)
+  const dispatch = useDispatch();
+  function changeHandler(e) {
+    dispatch({
+      type: 'UPDATE_TODO_FIELD',
+      value: {id, value: e.target.value, field: 'title'}
+    })
+  }
+  return <input type="text" value={value} onChange={changeHandler} />
+}
+
+const CheckBox = ({id}) => {
+  const value = useSelector(state => state.todoList[id]?.completed)
+  const dispatch = useDispatch();
+  function changeHandler(e) {
+    dispatch({
+      type: 'UPDATE_TODO_FIELD',
+      value: {id, value: e.target.checked, field: 'completed'}
+    })
+  }
+  return <input type="checkbox" value={value} onChange={changeHandler} />
+}
