@@ -12,11 +12,11 @@ export const TodoList = () => {
         "https://jsonplaceholder.typicode.com/todos"
       );
       const data = await response.json();
-      setTodoList(data);
       dispatch({
         type: 'UPDATE_TODO_LIST',
         value: data
-      })
+      });
+      setTodoList(data);
     }
     getTodoList();
   }, []);
@@ -42,24 +42,24 @@ export const TodoList = () => {
 };
 
 const TextBox = ({id}) => {
-  const value = useSelector(state => state.todoList[id]?.title)
+  const value = useSelector(state => state[id]?.title)
   const dispatch = useDispatch();
   function changeHandler(e) {
     dispatch({
       type: 'UPDATE_TODO_FIELD',
-      value: {id, value: e.target.value, field: 'title'}
+      id, value: e.target.value, field: 'title'
     })
   }
   return <input type="text" value={value} onChange={changeHandler} />
 }
 
 const CheckBox = ({id}) => {
-  const value = useSelector(state => state.todoList[id]?.completed)
+  const value = useSelector(state => state[id]?.completed);
   const dispatch = useDispatch();
   function changeHandler(e) {
     dispatch({
       type: 'UPDATE_TODO_FIELD',
-      value: {id, value: e.target.checked, field: 'completed'}
+      id, value: e.target.checked, field: 'completed'
     })
   }
   return <input type="checkbox" value={value} onChange={changeHandler} />
